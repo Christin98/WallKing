@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:orderInCategory="100">
+<!--        <item android:icon="@mipmap/ic_home" android:id="@id/nav_item_home" android:checked="false" android:visible="false" android:title="Home" android:checkable="false" />-->
+<!--        <item android:icon="@mipmap/ic_menu_double" android:id="@id/nav_item_double_wall" android:checked="false" android:title="Double Wallpaper" />-->
+<!--        <item android:icon="@mipmap/ic_left_edge" android:id="@id/nav_item_edge_light" android:checked="false" android:title="Edge Lighting Wallpaper" />-->
+<!--        <item android:icon="@mipmap/ic_menu_whats" android:id="@id/nav_item_status_saver" android:checked="false" android:title="Status Saver" app:actionLayout="@layout/menu_action_item_badge" />-->
+<!--        <item android:icon="@mipmap/ic_fav" android:id="@id/nav_item_my_fav" android:checked="false" android:title="My Favorites" />-->
+<!--        <item android:icon="@mipmap/ic_download" android:id="@id/nav_item_my_download" android:checked="false" android:title="My Downloads" />-->
+<!--        <item android:icon="@mipmap/ic_exclusive" android:id="@id/nav_item_exclusive_wall" android:checked="false" android:visible="false" android:title="Exclusive Wallpaper" />-->
+<!--        <item android:icon="@mipmap/ic_autowallpaper" android:id="@id/nav_item_wallpaper" android:visible="false" android:title="Auto Wallpaper Change" />-->
+<!--        <item android:icon="@mipmap/ic_autowallpaper" android:id="@id/nav_item_wallpaper_setting" android:title="Auto Wallpaper Changer" />-->
+<!--        <item android:icon="@mipmap/ic_help" android:id="@id/nav_item_wallpaper_not" android:title="Live Wallpaper Not Working?" />-->
+<!--        <item android:icon="@mipmap/ic_theme" android:id="@id/nav_item_theme" android:title="Theme" />-->
+<!--        <item android:icon="@mipmap/ic_pro" android:id="@id/nav_item_pro" android:title="Remove Ads" />-->
+    </group>
+    <item android:orderInCategory="102" android:title="More Option">
+        <menu>
+<!--            <item android:icon="@mipmap/ic_rate" android:id="@id/nav_item_rate" android:title="Rate us" />-->
+<!--            <item android:icon="@mipmap/ic_share" android:id="@id/nav_item_share" android:title="Share" />-->
+<!--            <item android:icon="@mipmap/ic_feedback" android:id="@id/nav_item_feedback" android:title="Send us Feedback" />-->
+<!--            <item android:icon="@mipmap/ic_privacy" android:id="@id/nav_privacy" android:title="Privacy Policy!" />-->
+<!--            <item android:icon="@mipmap/ic_app_tour" android:id="@id/nav_item_tour" android:title="App Tour" />-->
+<!--            <item android:icon="@mipmap/ic_about" android:id="@id/nav_item_about" android:title="About Us" />-->
+        </menu>
+    </item>
+</menu>

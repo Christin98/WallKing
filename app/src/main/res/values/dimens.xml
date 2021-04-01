@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="TAB_HEIGHT">30.0dip</dimen>
+    <dimen name="TAB_TEXT_SIZE">13.0sp</dimen>
+    <dimen name="large_text_size">18.0sp</dimen>
+    <dimen name="content_padding_recycle">2.0dip</dimen>
+
+</resources>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:id="@+id/activity_friend_request"
+    android:background="?my_background"
+    android:clickable="true"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:id="@+id/llRvList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh"
+            android:background="?my_background"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true">
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <TextView
+                    android:textColor="#ffffffff"
+                    android:gravity="center"
+                    android:id="@+id/txt_path"
+                    android:background="?my_setting_bg"
+                    android:padding="8.0dip"
+                    android:visibility="gone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Note: To Delete photo long click on photo" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/list"
+                        android:paddingLeft="@dimen/content_padding_recycle"
+                        android:paddingRight="@dimen/content_padding_recycle"
+                        android:clipToPadding="false"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:drawSelectorOnTop="true"
+                        android:layout_below="@id/txt_path" />
+                    <RelativeLayout
+                        android:gravity="center"
+                        android:id="@+id/rl_no_content"
+                        android:visibility="gone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_centerInParent="true">
+                        <TextView
+                            android:textSize="@dimen/large_text_size"
+                            android:textColor="?my_textColor"
+                            android:gravity="center"
+                            android:id="@+id/txt_no"
+                            android:padding="10.0dip"
+                            android:visibility="visible"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="No Campaign data available. pls try later." />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <RelativeLayout
+                android:id="@+id/rl_progress"
+                android:visibility="gone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+<!--                <fr.castorflex.android.circularprogressbar.CircularProgressBar -->
+<!--                    android:id="@+id/layout_loading_search" -->
+<!--                    android:layout_marginBottom="60.0dip" -->
+<!--                    android:indeterminate="true" -->
+<!--                    android:layout_centerHorizontal="true" -->
+<!--                    style="@style/CircularThemeProgressBar_centre" />-->
+            </RelativeLayout>
+        </RelativeLayout>
+</RelativeLayout>

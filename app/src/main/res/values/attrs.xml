@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="my_colorPrimary" format="reference|color" />
+    <attr name="my_background" format="reference|color" />
+    <attr name="my_textColor" format="reference|color" />
+    <attr name="my_textColor_left_drawer" format="reference|color" />
+    <attr name="my_setting_bg" format="reference|color" />
+
+
+</resources>

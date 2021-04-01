@@ -50,11 +50,11 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> progressBar.setVisibility(View.VISIBLE),2000);
 
-        new Handler().postDelayed(this::enterMain, 5000);
+        new Handler().postDelayed(this::toMain, 5000);
 
     }
 
-    private void enterMain() {
+    private void toMain() {
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
