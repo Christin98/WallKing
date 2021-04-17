@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ffffffff</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimary2">#000000</color>
+    <color name="primaryDarkColor">#000000</color>
+    <color name="colorAccent">#3077ee</color>
+    <color name="colorSemiTransparent">#83000000</color>
 
-    <color name="colorBackground">#0E0B15</color>
-    <color name="colorText">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorEditHintText">#808080</color>
+    <color name="coloredit">#efefef</color>
+
+
+    <color name="darkColorAccent">#3077ee</color>
+    <color name="darkColorPrimary">#383838</color>
+    <color name="darkColorPrimaryDark">#171717</color>
+
+    <color name="mainBackground">#fafafa</color>
+    <color name="mainBackgroundDark">#181818</color>
+
+    <color name="primaryText">#000000</color>
+    <color name="primaryTextDark">#eaffffff</color>
 
 
     <color name="purple_200">#FFBB86FC</color>
@@ -16,9 +33,6 @@
 
     <color name="transparent">#00000000</color>
 <!--    <color name="colorPrimary">#ffffffff</color>-->
-    <color name="colorPrimary1">#ff202124</color>
-    <color name="textColorPrimary">#ff444444</color>
-    <color name="textColorPrimary1">#ffffffff</color>
 
     <color name="grey_300">#ffdddddd</color>
 

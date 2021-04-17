@@ -1,87 +1,123 @@
 package com.kcdeveloperss.wallpapers;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.transition.Fade;
+import android.os.Handler;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.google.android.material.tabs.TabLayout;
-import com.kcdeveloperss.wallpapers.adapter.TabsPageAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.kcdeveloperss.wallpapers.fragments.HomeFragment;
+import com.kcdeveloperss.wallpapers.utils.AppUtils;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-    ViewPager viewPager;
-    TabLayout tabLayout;
-    TabsPageAdapter tabsPageAdapter;
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private final String[] tabTitle = {"Home", "Live Wallpaper", "Exclusive Wallpaper", "Trending", "Category"};
+    @BindView(R.id.ivDrawer)
+    ImageView ivDrawer;
+    @BindView(R.id.txtX)
+    TextView txtX;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.AppBar)
+    LinearLayout AppBar;
+    @BindView(R.id.fl_container)
+    FrameLayout flContainer;
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigation;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    boolean clickAgainToExit = false;
+    private boolean activityStarted = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        setUpWindowAnimation();
+//        if (activityStarted &&
+//                getIntent() != null &&
+//                (getIntent().getFlags() & Intent.FLAG_ACTIVITY_REORDER_TO_FRONT) != 0) {
+//            finish();
+//            return;
+//        }
 
-        viewPager = findViewById(R.id.viewpager);
-        tabLayout = findViewById(R.id.tabs);
+        activityStarted = true;
 
-        tabLayout.setupWithViewPager(viewPager);
-        setupViewPager(viewPager);
-        invalidateOptionsMenu();
-    }
+        loadFragment(new HomeFragment());
 
-    private void setupViewPager(ViewPager viewPager) {
-        viewPager.setOffscreenPageLimit(5);
-        tabsPageAdapter = new TabsPageAdapter(this, getSupportFragmentManager());
-        Bundle bundle = new Bundle();
-        WallFragment wallFragment = new WallFragment();
-        bundle.putString("Category", "Home");
-        tabsPageAdapter.addFragment(wallFragment, "Home");
-        Bundle bundle1 = new Bundle();
-        WallFragment wallFragment1 = new WallFragment();
-        bundle1.putString("Category", "Home");
-        tabsPageAdapter.addFragment(wallFragment1, "Home");
-        Bundle bundle2 = new Bundle();
-        WallFragment wallFragment2 = new WallFragment();
-        bundle2.putString("Category", "Home");
-        tabsPageAdapter.addFragment(wallFragment2, "Home");
-        Bundle bundle3 = new Bundle();
-        WallFragment wallFragment3 = new WallFragment();
-        bundle3.putString("Category", "Home");
-        tabsPageAdapter.addFragment(wallFragment3, "Home");
-        Bundle bundle4 = new Bundle();
-        WallFragment wallFragment4 = new WallFragment();
-        bundle4.putString("Category", "Home");
-        tabsPageAdapter.addFragment(wallFragment4, "Home");
-        Bundle bundle5 = new Bundle();
-        WallFragment wallFragment5 = new WallFragment();
-        bundle5.putString("Category", "Home");
-        tabsPageAdapter.addFragment(wallFragment5, "Home");
-        Bundle bundle6 = new Bundle();
-        WallFragment wallFragment6 = new WallFragment();
-        bundle6.putString("Category", "Home");
-        tabsPageAdapter.addFragment(wallFragment6, "Home");
-        viewPager.setAdapter(tabsPageAdapter);
-    }
-
-    private void setUpTabs() {
-        tabLayout.getTabAt(0).setText(tabTitle[0]);
-        tabLayout.getTabAt(1).setText(tabTitle[1]);
-        tabLayout.getTabAt(2).setText(tabTitle[2]);
-        tabLayout.getTabAt(3).setText(tabTitle[3]);
-        tabLayout.getTabAt(4).setText(tabTitle[4]);
+        bottomNavigation.setOnNavigationItemSelectedListener(this);
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void setUpWindowAnimation() {
-        Fade fade = new Fade();
-        fade.setDuration(1000);
-        getWindow().setExitTransition(fade);
+    @OnClick({R.id.ivDrawer, R.id.bottom_navigation})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ivDrawer:
+            case R.id.bottom_navigation:
+
+                break;
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            // Home
+            case R.id.navigation_home:
+                loadFragment(new HomeFragment());
+            case R.id.navigation_explore:
+                loadFragment();
+            case R.id.navigation_favourite:
+                loadFragment();
+        }
+        return false;
+    }
+
+    public void loadFragment(Fragment fragment) {
+        // Insert the fragment by replacing any existing fragment
+        String backStateName = fragment.getClass().getName();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        boolean fragmentPopped  = fragmentManager.popBackStackImmediate(backStateName, 0);
+
+        if (!fragmentPopped) {
+            //fragment not in back stack, create it.
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fl_container, fragment, backStateName);
+            fragmentTransaction.addToBackStack(backStateName);
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStackImmediate();
+        if (fragmentManager.getBackStackEntryCount() == 1) {
+            if (clickAgainToExit) {
+                super.onBackPressed();
+                finish();
+                return;
+            }
+            clickAgainToExit = true;
+            AppUtils.shortToast(MainActivity.this, getResources().getString(R.string.app_backpress));
+            new Handler().postDelayed(() -> clickAgainToExit = false, 2000);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
