@@ -63,7 +63,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSelectedListner {
+public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSelectedListner, TrendingAdapter.OnCategorySelectedListner, TrendingPhotoByIdAdapter.OnCategorybyidSelectedListner {
 
     private static final int EXTERNAL_STORAGE_PERMISSION_CONSTANT = 1;
     private static final int REQUEST_PERMISSION_SETTING = 0;
@@ -152,7 +152,7 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
         ProgressDialogSetup();
         getRandom();
         getNewPhotos();
-//        getTrending();
+        getTrending();
         edtSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 exploretitle = edtSearch.getText().toString();
@@ -166,6 +166,7 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
         });
         return view;
     }
+
 
     public void ProgressDialogSetup() {
         progressDialog = new ProgressDialog(getActivity());
@@ -384,6 +385,102 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
         });
     }
 
+    private void getTrending() {
+        progressDialog.show();
+        Call<JsonElement> call1 = RestClient.post().getTrending(Config.unsplash_access_key);
+        call1.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                progressDialog.dismiss();
+                Log.e("FeatureNews", response.body().toString());
+                if (response.isSuccessful()) {
+                    trendingList.clear();
+                    JSONArray jsonArr = null;
+                    try {
+                        jsonArr = new JSONArray(response.body().toString());
+
+                        if (jsonArr.length() > 0) {
+                            for (int i = 0; i < jsonArr.length(); i++) {
+                                JSONObject json2 = jsonArr.getJSONObject(i);
+                                String id = json2.getString("id");
+                                String title = json2.getString("title");
+                                trendingList.add(new TrendingBean(id, title,false));
+                            }
+                            bindCategoryAdapter();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void getTrendPhotosById() {
+        Call<JsonElement> call1 = RestClient.post().getTrendingPhotosbyId(trendId, 1, 12, Config.unsplash_access_key);
+        call1.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                Log.e("FeatureNews", response.body().toString());
+                if (response.isSuccessful()) {
+                    trendingPhotosByIdList.clear();
+                    JSONArray jsonArr = null;
+                    try {
+                        jsonArr = new JSONArray(response.body().toString());
+
+                        if (jsonArr.length() > 0) {
+                            for (int i = 0; i < jsonArr.length(); i++) {
+                                JSONObject json2 = jsonArr.getJSONObject(i);
+                                String id = json2.getString("id");
+
+                                JSONObject object = json2.getJSONObject("urls");
+                                String url = object.getString("regular");
+                                trendingPhotosByIdList.add(new TrendingBean(id, url));
+
+                            }
+                            bindTrendPhotosByIdAdapter();
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void bindCategoryAdapter() {
+        if (trendingList.size() > 0) {
+            trendingAdapter = new TrendingAdapter(getActivity(), trendingList);
+            rvTrending.setAdapter(trendingAdapter);
+            trendId = trendingList.get(0).getId();
+            trendingList.get(0).setSelected(true);
+        }
+        trendingAdapter.setOnCategorySelectedListner(this);
+        trendingAdapter.notifyDataSetChanged();
+
+        getTrendPhotosById();
+
+    }
+
+    private void bindTrendPhotosByIdAdapter() {
+        if (trendingPhotosByIdList.size() > 0){
+            trendingPhotoByIdAdapter = new TrendingPhotoByIdAdapter(getActivity(), trendingPhotosByIdList);
+            trendingPhotoByIdAdapter.setOnCategorybyidSelectedListner(this);
+            rvTrendingphotosbyId.setAdapter(trendingPhotoByIdAdapter);
+        }
+    }
+
     private void bindTrendData() {
         if (newPhotoslist.size() > 0) {
             newPhotosAdapter = new NewPhotosAdapter(getActivity(), newPhotoslist);
@@ -394,6 +491,24 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
 
     @Override
     public void setOnPhotoSelatedListner(int position, PhotosBean dataBean) {
+
+    }
+
+    @Override
+    public void setOnCategorySelatedListner(int position, TrendingBean trendingBean) {
+        for (int i = 0; i < trendingList.size(); i++) {
+            trendingList.get(i).setSelected(false);
+        }
+        if (trendingList.size() > 0) {
+            trendingAdapter.notifyDataSetChanged();
+            trendId = trendingBean.getId();
+            trendingBean.setSelected(true);
+            getTrendPhotosById();
+        }
+    }
+
+    @Override
+    public void setOnCategorybyidSelatedListner(int position, TrendingBean trendingBean) {
 
     }
 }
