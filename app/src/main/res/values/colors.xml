@@ -10,6 +10,7 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorEditHintText">#808080</color>
     <color name="coloredit">#efefef</color>
+    <color name="colortrendingLine">#d4c2bcbc</color>
 
 
     <color name="darkColorAccent">#3077ee</color>

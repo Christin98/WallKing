@@ -3,15 +3,56 @@ plugins {
 }
 
 android {
+
+    def _versionCode=0
+    def _major=0
+    def _minor=0
+    def _patch=0
+
+    def _applicationId = "com.kcdeveloperss.wallpapers"
+
+    def versionPropsFile = file('version.properties')
+
+    if (versionPropsFile.canRead()) {
+        Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        _patch = versionProps['PATCH'].toInteger() + 1
+        _major = versionProps['MAJOR'].toInteger()
+        _minor = versionProps['MINOR'].toInteger()
+        _versionCode= versionProps['VERSION_CODE'].toInteger()+1
+        if(_patch == 99)
+        {
+            _patch = 0
+            _minor = _minor+1
+        }
+        if(_major == 99){
+            _major = 0
+            _major = _major+1
+        }
+
+        versionProps['MAJOR']=_major.toString()
+        versionProps['MINOR']=_minor.toString()
+        versionProps['PATCH']=_patch.toString()
+        versionProps['VERSION_CODE']=_versionCode.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+    }
+    else {
+        throw new GradleException("Could not read version.properties!")
+    }
+    def _versionName = "${_major}.${_versionCode}.${_minor}.${_patch}"
+
+
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.kcdeveloperss.wallpapers"
+        applicationId _applicationId
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode _versionCode
+        versionName _versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -37,6 +78,11 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
+    implementation 'com.squareup.okhttp:okhttp:2.7.5'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

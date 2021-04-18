@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_home:
                 loadFragment(new HomeFragment());
             case R.id.navigation_explore:
-                loadFragment();
+//                loadFragment();
             case R.id.navigation_favourite:
-                loadFragment();
+//                loadFragment();
         }
         return false;
     }
