@@ -5,9 +5,9 @@ plugins {
 android {
 
     def _versionCode=0
-    def _major=0
-    def _minor=0
-    def _patch=0
+    def _major
+    def _minor
+    def _patch
 
     def _applicationId = "com.kcdeveloperss.wallpapers"
 

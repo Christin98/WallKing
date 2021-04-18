@@ -63,7 +63,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSelectedListner {
 
     private static final int EXTERNAL_STORAGE_PERMISSION_CONSTANT = 1;
     private static final int REQUEST_PERMISSION_SETTING = 0;
@@ -151,7 +151,7 @@ public class HomeFragment extends Fragment {
 
         ProgressDialogSetup();
         getRandom();
-//        getNewPhotos();
+        getNewPhotos();
 //        getTrending();
         edtSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -342,5 +342,58 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void getNewPhotos() {
+        Call<JsonElement> call1 = RestClient.post().getNewPhotos(Config.NEW_ID, Config.unsplash_access_key);
+        call1.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                newPhotoslist.clear();
+                Log.e("FeatureNews", response.body().toString());
+                if (response.isSuccessful()) {
+                    JSONArray jsonArr = null;
+                    try {
+                        jsonArr = new JSONArray(response.body().toString());
+                        if (jsonArr.length() > 0) {
+                            for (int i = 0; i < jsonArr.length(); i++) {
+                                JSONObject json2 = jsonArr.getJSONObject(i);
+                                String id = json2.getString("id");
 
+                                JSONObject object = json2.getJSONObject("urls");
+                                String url = object.getString("regular");
+
+                                JSONObject objectUser = json2.getJSONObject("user");
+                                JSONObject objectUserProfile = objectUser.getJSONObject("profile_image");
+                                String userprofile = objectUserProfile.getString("large");
+
+                                newPhotoslist.add(new PhotosBean(id,url,userprofile));
+
+                            }
+
+                            bindTrendData();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void bindTrendData() {
+        if (newPhotoslist.size() > 0) {
+            newPhotosAdapter = new NewPhotosAdapter(getActivity(), newPhotoslist);
+            newPhotosAdapter.setOnCategorySelectedListner(this);
+            rvNewPhotos.setAdapter(newPhotosAdapter);
+        }
+    }
+
+    @Override
+    public void setOnPhotoSelatedListner(int position, PhotosBean dataBean) {
+
+    }
 }
