@@ -19,10 +19,14 @@ public class SplashActivity extends AppCompatActivity {
 
     ImageView app_logo;
     TextView app_slogan;
+    TextView app_Version;
     TextView app_powered_by1;
     TextView app_powered_by2;
 
     ProgressBar progressBar;
+
+    String versionName = BuildConfig.VERSION_NAME;
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -34,6 +38,7 @@ public class SplashActivity extends AppCompatActivity {
 
         app_logo = findViewById(R.id.app_logo);
         app_slogan = findViewById(R.id.app_slogan);
+        app_Version = findViewById(R.id.app_version);
         app_powered_by1 = findViewById(R.id.app_powered_by1);
         app_powered_by2 = findViewById(R.id.app_powered_by2);
         progressBar = findViewById(R.id.progressBar);
@@ -42,9 +47,12 @@ public class SplashActivity extends AppCompatActivity {
         Animation bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.start_bottom_animation);
 
         progressBar.setVisibility(View.INVISIBLE);
+        app_Version.setText(versionName);
 
         app_logo.startAnimation(topAnimation);
         app_slogan.startAnimation(bottomAnimation);
+
+        app_Version.startAnimation(bottomAnimation);
         app_powered_by1.startAnimation(bottomAnimation);
         app_powered_by2.startAnimation(bottomAnimation);
 

@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.kcdeveloperss.wallpapers.fragments.ExploreFragment;
 import com.kcdeveloperss.wallpapers.fragments.HomeFragment;
 import com.kcdeveloperss.wallpapers.utils.AppUtils;
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_home:
                 loadFragment(new HomeFragment());
             case R.id.navigation_explore:
-//                loadFragment();
+                loadFragment(new ExploreFragment());
             case R.id.navigation_favourite:
 //                loadFragment();
         }
