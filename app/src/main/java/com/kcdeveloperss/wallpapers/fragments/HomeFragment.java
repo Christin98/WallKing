@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.JsonElement;
+import com.kcdeveloperss.wallpapers.MainActivity;
 import com.kcdeveloperss.wallpapers.R;
 import com.kcdeveloperss.wallpapers.adapters.NewPhotosAdapter;
 import com.kcdeveloperss.wallpapers.adapters.TrendingAdapter;
@@ -65,8 +66,6 @@ import retrofit2.Response;
 
 public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSelectedListner, TrendingAdapter.OnCategorySelectedListner, TrendingPhotoByIdAdapter.OnCategorybyidSelectedListner {
 
-    private static final int EXTERNAL_STORAGE_PERMISSION_CONSTANT = 1;
-    private static final int REQUEST_PERMISSION_SETTING = 0;
     @BindView(R.id.edtSearch)
     EditText edtSearch;
     @BindView(R.id.cv_Share)
@@ -159,6 +158,8 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
 
                 InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                SearchFragment searchFragment = SearchFragment.newInstance(exploretitle);
+                loadFragment(searchFragment);
                 edtSearch.setText("");
                 return true;
             }
@@ -207,7 +208,8 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
                 startActivity(Intent.createChooser(shareIntent, alt_description));
                 break;
             case R.id.ivRandom:
-//                loadFragment();
+                DetailFragment newDetailsFragment = DetailFragment.newInstance(randomPhotoId);
+                loadFragment(newDetailsFragment);
                 break;
             case R.id.cv_download:
                 anImage = ((BitmapDrawable) ivRandom.getDrawable()).getBitmap();
@@ -491,7 +493,8 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
 
     @Override
     public void setOnPhotoSelatedListner(int position, PhotosBean dataBean) {
-
+        DetailFragment newsDetailsFragment = DetailFragment.newInstance(dataBean.getId());
+        loadFragment(newsDetailsFragment);
     }
 
     @Override
@@ -509,6 +512,7 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
 
     @Override
     public void setOnCategorybyidSelatedListner(int position, TrendingBean trendingBean) {
-
+        DetailFragment newsDetailsFragment = DetailFragment.newInstance(trendingBean.getId());
+        ((MainActivity) getActivity()).loadFragment(newsDetailsFragment);
     }
 }
