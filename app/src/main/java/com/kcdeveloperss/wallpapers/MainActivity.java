@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_explore:
                 loadFragment(new ExploreFragment());
             case R.id.navigation_favourite:
+                AppUtils.shortToast(getApplicationContext(), "Working On It.");
 //                loadFragment();
         }
         return false;
