@@ -123,7 +123,7 @@ public class DetailFragment extends Fragment implements RelatedPhotosAdapter.OnP
         unbinder = ButterKnife.bind(this, view);
         ProgressDialogSetup();
         photoId = getArguments().getString(Config.photoid, "");
-        getPhotosById();
+//        getPhotosById();
         return view;
     }
 
@@ -134,96 +134,96 @@ public class DetailFragment extends Fragment implements RelatedPhotosAdapter.OnP
         progressDialog.setCancelable(false);
     }
 
-    private void getPhotosById() {
-        progressDialog.show();
-        Call<JsonElement> call1 = RestClient.post().getPhotosById(photoId, Config.unsplash_access_key);
-        call1.enqueue(new Callback<JsonElement>() {
-            @Override
-            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-
-                progressDialog.dismiss();
-                relatedPhotoslist.clear();
-                Log.e("photobyid", response.body().toString());
-                if (response.isSuccessful()) {
-
-                    JSONObject json2 = null;
-                    try {
-                        json2 = new JSONObject(response.body().toString());
-                        if (json2.length() > 0) {
-
-
-                            final String id = json2.getString("id");
-                            alt_description = json2.getString("alt_description");
-
-                            JSONObject object = json2.getJSONObject("urls");
-                            final String url = object.getString("regular");
-                            JSONObject jsonObjectlink = json2.getJSONObject("links");
-                            sharlink = jsonObjectlink.getString("html");
-                            JSONObject objectUser = json2.getJSONObject("user");
-                            JSONObject objectUserProfile = objectUser.getJSONObject("profile_image");
-                            String userprofile = objectUserProfile.getString("large");
-                            username = objectUser.getString("username");
-
-                            String name = objectUser.getString("name");
-
-
-                            Glide.with(getActivity()).load(url)
-                                    .thumbnail(0.5f)
-                                    .placeholder(R.drawable.ic_placeholder_photos)
-                                    .error(R.drawable.ic_placeholder_photos)
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .into(ivPhoto);
-                            Glide.with(getActivity()).load(userprofile)
-                                    .thumbnail(0.5f)
-                                    .placeholder(R.drawable.ic_user)
-                                    .error(R.drawable.ic_user)
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .into(ivUserProfile);
-                            tvUserName.setText(name);
-                            tvDesc.setText(alt_description);
-
-                            JSONObject objectRelated = json2.getJSONObject("related_collections");
-                            JSONArray array = objectRelated.getJSONArray("results");
-                            if (array.length() > 0) {
-                                for (int i = 0; i < array.length(); i++) {
-                                    JSONObject jsonObject = array.getJSONObject(i);
-
-                                    JSONObject jsonObject1 = jsonObject.getJSONObject("cover_photo");
-                                    JSONObject objectCoverPhoto = jsonObject1.getJSONObject("urls");
-                                    String coverUrl = objectCoverPhoto.getString("regular");
-                                    String idRelated = jsonObject1.getString("id");
-                                    relatedPhotoslist.add(new RelatedBean(idRelated, coverUrl));
-
-                                }
-                                bindRelatedData();
-                            }
-
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonElement> call, Throwable t) {
-                progressDialog.dismiss();
-
-            }
-
-        });
-    }
-
-    private void bindRelatedData() {
-
-        if (relatedPhotoslist.size() > 0) {
-
-            relatedPhotosAdapter = new RelatedPhotosAdapter(getActivity(), relatedPhotoslist);
-            relatedPhotosAdapter.setOnCategorySelectedListner(this);
-            rvRelated.setAdapter(relatedPhotosAdapter);
-        }
-
-    }
+//    private void getPhotosById() {
+//        progressDialog.show();
+//        Call<JsonElement> call1 = RestClient.post().getPhotosById(photoId, Config.unsplash_access_key);
+//        call1.enqueue(new Callback<JsonElement>() {
+//            @Override
+//            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+//
+//                progressDialog.dismiss();
+//                relatedPhotoslist.clear();
+//                Log.e("photobyid", response.body().toString());
+//                if (response.isSuccessful()) {
+//
+//                    JSONObject json2 = null;
+//                    try {
+//                        json2 = new JSONObject(response.body().toString());
+//                        if (json2.length() > 0) {
+//
+//
+//                            final String id = json2.getString("id");
+//                            alt_description = json2.getString("alt_description");
+//
+//                            JSONObject object = json2.getJSONObject("urls");
+//                            final String url = object.getString("regular");
+//                            JSONObject jsonObjectlink = json2.getJSONObject("links");
+//                            sharlink = jsonObjectlink.getString("html");
+//                            JSONObject objectUser = json2.getJSONObject("user");
+//                            JSONObject objectUserProfile = objectUser.getJSONObject("profile_image");
+//                            String userprofile = objectUserProfile.getString("large");
+//                            username = objectUser.getString("username");
+//
+//                            String name = objectUser.getString("name");
+//
+//
+//                            Glide.with(getActivity()).load(url)
+//                                    .thumbnail(0.5f)
+//                                    .placeholder(R.drawable.ic_placeholder_photos)
+//                                    .error(R.drawable.ic_placeholder_photos)
+//                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                                    .into(ivPhoto);
+//                            Glide.with(getActivity()).load(userprofile)
+//                                    .thumbnail(0.5f)
+//                                    .placeholder(R.drawable.ic_user)
+//                                    .error(R.drawable.ic_user)
+//                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                                    .into(ivUserProfile);
+//                            tvUserName.setText(name);
+//                            tvDesc.setText(alt_description);
+//
+//                            JSONObject objectRelated = json2.getJSONObject("related_collections");
+//                            JSONArray array = objectRelated.getJSONArray("results");
+//                            if (array.length() > 0) {
+//                                for (int i = 0; i < array.length(); i++) {
+//                                    JSONObject jsonObject = array.getJSONObject(i);
+//
+//                                    JSONObject jsonObject1 = jsonObject.getJSONObject("cover_photo");
+//                                    JSONObject objectCoverPhoto = jsonObject1.getJSONObject("urls");
+//                                    String coverUrl = objectCoverPhoto.getString("regular");
+//                                    String idRelated = jsonObject1.getString("id");
+//                                    relatedPhotoslist.add(new RelatedBean(idRelated, coverUrl));
+//
+//                                }
+//                                bindRelatedData();
+//                            }
+//
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<JsonElement> call, Throwable t) {
+//                progressDialog.dismiss();
+//
+//            }
+//
+//        });
+//    }
+//
+//    private void bindRelatedData() {
+//
+//        if (relatedPhotoslist.size() > 0) {
+//
+//            relatedPhotosAdapter = new RelatedPhotosAdapter(getActivity(), relatedPhotoslist);
+//            relatedPhotosAdapter.setOnCategorySelectedListner(this);
+//            rvRelated.setAdapter(relatedPhotosAdapter);
+//        }
+//
+//    }
 
     private void loadFragment(Fragment fragment) {
         String backStateName = fragment.getClass().getName();
@@ -302,14 +302,12 @@ public class DetailFragment extends Fragment implements RelatedPhotosAdapter.OnP
         @Override
         public void setOnPhotoSelatedListner(int position, RelatedBean relatedBean) {
             photoId = relatedBean.getId();
-            getPhotosById();
+//            getPhotosById();
         }
 
         public void refreshData(Bundle arguments) {
             photoId = arguments.getString(Config.photoid,"");
-            getPhotosById();
+//            getPhotosById();
         }
-
-
 
 }

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools"
-    android:layout_marginRight="@dimen/m15dp"
     android:layout_width="150dp"
     android:layout_height="150dp"
-    android:layout_marginEnd="@dimen/m15dp">
+    android:layout_margin="@dimen/m15dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="150dp"
@@ -25,21 +23,21 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_placeholder_sq"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/m20dp"
-                android:gravity="bottom|center"
-                android:layout_alignParentBottom="true">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/cv_user_image"
-                    android:layout_width="@dimen/m40dp"
-                    android:layout_height="@dimen/m40dp"
-                    android:src="@drawable/ic_user"
-                    app:civ_border_width="2dp"
-                    app:civ_border_color="@color/colorWhite"
-                    />
-            </RelativeLayout>
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="@dimen/m20dp"-->
+<!--                android:gravity="bottom|center"-->
+<!--                android:layout_alignParentBottom="true">-->
+<!--&lt;!&ndash;                <de.hdodenhof.circleimageview.CircleImageView&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:id="@+id/cv_user_image"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="@dimen/m40dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="@dimen/m40dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:src="@drawable/ic_user"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:civ_border_width="2dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:civ_border_color="@color/colorWhite"&ndash;&gt;-->
+<!--&lt;!&ndash;                    />&ndash;&gt;-->
+<!--            </RelativeLayout>-->
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

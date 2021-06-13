@@ -64,7 +64,7 @@ public class RelatedPhotosAdapter extends RecyclerView.Adapter<RelatedPhotosAdap
     }
 
 
-    public class RecyclerVH extends RecyclerView.ViewHolder {
+    public static class RecyclerVH extends RecyclerView.ViewHolder {
         ImageView imgview;
 
         public RecyclerVH(View itemView) {

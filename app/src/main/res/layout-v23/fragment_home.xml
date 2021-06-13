@@ -16,12 +16,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/edtSearch"
@@ -31,7 +31,6 @@
                     android:layout_marginTop="@dimen/m20dp"
                     android:layout_marginRight="@dimen/m20dp"
                     android:background="@drawable/bg_search"
-                    android:drawableLeft="@drawable/ic_search"
                     android:drawablePadding="@dimen/m10dp"
                     android:hint="@string/search_high_resolution_photos"
                     android:imeActionId="3"
@@ -43,7 +42,6 @@
 
 
             </LinearLayout>
-            <!-- TODO: Update blank fragment layout -->
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
@@ -59,7 +57,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:adjustViewBounds="true"
                         android:alpha="20"
@@ -75,7 +72,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentBottom="true"
                         android:layout_margin="16dp"
                         android:gravity="center"
@@ -92,29 +88,28 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/m10dp"
                             android:layout_weight="1"
                             android:orientation="vertical"
                             android:layout_marginStart="@dimen/m10dp">
 
-                            <TextView
-                                android:id="@+id/tvDesc"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:singleLine="true"
-                                android:text="@string/app_name"
-                                android:textColor="@color/colorWhite" />
+<!--                            <TextView-->
+<!--                                android:id="@+id/tvDesc"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:singleLine="true"-->
+<!--                                android:text="@string/app_name"-->
+<!--                                android:textColor="@color/colorWhite" />-->
 
-                            <TextView
-                                android:id="@+id/tvUserName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawablePadding="5dp"
-                                android:drawableTint="@color/colorWhite"
-                                android:gravity="end"
-                                android:singleLine="true"
-                                android:text="@string/app_name"
-                                android:textColor="@color/colorWhite" />
+<!--                            <TextView-->
+<!--                                android:id="@+id/tvUserName"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:drawablePadding="5dp"-->
+<!--                                android:gravity="end"-->
+<!--                                android:singleLine="true"-->
+<!--                                android:text="@string/app_name"-->
+<!--                                android:textColor="@color/colorWhite"-->
+<!--                                app:drawableTint="@color/colorWhite" />-->
 
                         </LinearLayout>
 
@@ -123,7 +118,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|center"
                             android:layout_weight="1"
-                            android:gravity="end"
+                            android:gravity="center"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -140,16 +135,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:visibility="gone"
-                                android:layout_marginLeft="@dimen/m5dp"
                                 android:button="@drawable/bg_checkbox"
-                                android:text="@null"
-                                android:layout_marginStart="@dimen/m5dp" />
-
+                                android:text="@null"/>
                             <ImageView
                                 android:id="@+id/cv_download"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/m5dp"
                                 android:src="@drawable/ic_download"
                                 android:layout_marginStart="@dimen/m5dp" />
                         </LinearLayout>
@@ -160,8 +151,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/m20dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_marginStart="@dimen/m20dp">
 
@@ -179,51 +169,52 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/m20dp"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:scrollbars="none"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
                     tools:listitem="@layout/item_newphotos" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/m20dp"
-                android:orientation="vertical">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/m20dp"-->
+<!--                android:orientation="vertical">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/m20dp"
-                    android:text="@string/trending"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/titleText"
-                    android:textStyle="bold" />
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvTrending"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/m20dp"
-                    android:orientation="horizontal"
-                    android:scrollbars="none"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_trendingcat"
-                    android:layout_marginStart="@dimen/m20dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvTrendingphotosbyId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="3"
-                    tools:listitem="@layout/item_trendingphotosbyid" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginLeft="@dimen/m20dp"-->
+<!--                    android:text="@string/trending"-->
+<!--                    android:textColor="@color/colorBlack"-->
+<!--                    android:textSize="@dimen/titleText"-->
+<!--                    android:textStyle="bold" />-->
 
 
-            </LinearLayout>
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/rvTrending"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginLeft="@dimen/m20dp"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:scrollbars="none"-->
+<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                    tools:listitem="@layout/item_trendingcat"-->
+<!--                    android:layout_marginStart="@dimen/m20dp" />-->
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/rvTrendingphotosbyId"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:nestedScrollingEnabled="false"-->
+<!--                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"-->
+<!--                    app:spanCount="3"-->
+<!--                    tools:listitem="@layout/item_trendingphotosbyid" />-->
+
+
+<!--            </LinearLayout>-->
 
             <ImageView
                 android:id="@+id/ivDownlod"

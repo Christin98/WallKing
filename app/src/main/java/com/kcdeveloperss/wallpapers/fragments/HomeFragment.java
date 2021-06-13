@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -64,7 +65,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSelectedListner, TrendingAdapter.OnCategorySelectedListner, TrendingPhotoByIdAdapter.OnCategorybyidSelectedListner {
+public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSelectedListner {
 
     @BindView(R.id.edtSearch)
     EditText edtSearch;
@@ -79,10 +80,10 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
     Unbinder unbinder;
     @BindView(R.id.rvNewPhotos)
     RecyclerView rvNewPhotos;
-    @BindView(R.id.rvTrendingphotosbyId)
-    RecyclerView rvTrendingphotosbyId;
-    @BindView(R.id.rvTrending)
-    RecyclerView rvTrending;
+//    @BindView(R.id.rvTrendingphotosbyId)
+//    RecyclerView rvTrendingphotosbyId;
+//    @BindView(R.id.rvTrending)
+//    RecyclerView rvTrending;
     @BindView(R.id.ivRandom)
     ImageView ivRandom;
     @BindView(R.id.ivDownlod)
@@ -96,21 +97,19 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
     private NewPhotosAdapter newPhotosAdapter;
     private ArrayList<PhotosBean> newPhotoslist = new ArrayList<>();
 
-    private TrendingAdapter trendingAdapter;
-    private ArrayList<TrendingBean> trendingList = new ArrayList<>();
-
-    private TrendingPhotoByIdAdapter trendingPhotoByIdAdapter;
-    private ArrayList<TrendingBean> trendingPhotosByIdList = new ArrayList<>();
+//    private TrendingAdapter trendingAdapter;
+//    private ArrayList<TrendingBean> trendingList = new ArrayList<>();
+//
+//    private TrendingPhotoByIdAdapter trendingPhotoByIdAdapter;
+//    private ArrayList<TrendingBean> trendingPhotosByIdList = new ArrayList<>();
 
     private ArrayList<PhotosBean> randomList = new ArrayList<>();
     private ProgressDialog progressDialog;
 
-    String url;
     Bitmap anImage;
     String randomPhotoId;
     String  alt_description;
     String  exploretitle;
-    private AsyncTask mMyTask;
     private ProgressDialog mProgressDialog;
     private static final int PERMISSION_REQUEST_CODE = 1;
     String wantPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -151,7 +150,6 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
         ProgressDialogSetup();
         getRandom();
         getNewPhotos();
-        getTrending();
         edtSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 exploretitle = edtSearch.getText().toString();
@@ -253,11 +251,7 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
     private boolean checkPermission(String permission){
         if (Build.VERSION.SDK_INT >= 23) {
             int result = ContextCompat.checkSelfPermission(getActivity(), permission);
-            if (result == PackageManager.PERMISSION_GRANTED){
-                return true;
-            } else {
-                return false;
-            }
+            return result == PackageManager.PERMISSION_GRANTED;
         } else {
             return true;
         }
@@ -266,70 +260,61 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
     private void requestPermission(String permission){
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)){
             Toast.makeText(getActivity(), "Write external storage permission allows us to write data. \n" +
-                    "                    Please allow in App Settings for additional functionality",Toast.LENGTH_LONG).show();
+                    "Please allow in App Settings for additional functionality",Toast.LENGTH_LONG).show();
         }
         ActivityCompat.requestPermissions(getActivity(), new String[]{permission},PERMISSION_REQUEST_CODE);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getActivity(), "Permission Granted.",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getActivity(),"Permission Denied.",
-                            Toast.LENGTH_LONG).show();
-                }
-                break;
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getActivity(), "Permission Granted.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getActivity(), "Permission Denied.",
+                        Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     private void getRandom() {
         progressDialog.show();
-        Call<JsonElement> call1 = RestClient.post().getRandom("30", Config.unsplash_access_key);
+        Call<JsonElement> call1 = RestClient.post().getRandom(1, 1, Config.pexel_api_key);
         call1.enqueue(new Callback<JsonElement>() {
             @Override
-            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+            public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
                 progressDialog.dismiss();
                 randomList.clear();
                 Log.e("random", response.body().toString());
                 if (response.isSuccessful()) {
-                    JSONArray jsonArr = null;
                     try {
-                        jsonArr = new JSONArray(response.body().toString());
-                        if (jsonArr.length() > 0) {
-                            for (int i = 0; i < jsonArr.length(); i++) {
-                                JSONObject json2 = jsonArr.getJSONObject(i);
-                                randomPhotoId = json2.getString("id");
-                                alt_description = json2.getString("alt_description");
+                        JSONObject jsonObject = new JSONObject(response.body().toString());
 
-                                JSONObject object = json2.getJSONObject("urls");
-                                url = object.getString("regular");
+                        JSONArray jsonArray= jsonObject.getJSONArray("photos");
 
-                                JSONObject objectUser = json2.getJSONObject("user");
-                                JSONObject objectUserProfile = objectUser.getJSONObject("profile_image");
-                                String userprofile = objectUserProfile.getString("large");
+                        int length = jsonArray.length();
 
-                                String name = objectUser.getString("name");
-                                JSONObject jsonObject = json2.getJSONObject("links");
-                                sharlink = jsonObject.getString("html");
-                                randomList.add(new PhotosBean(randomPhotoId, url));
-                                Glide.with(getActivity()).load(url)
+
+                        if (length > 0) {
+                            for (int i = 0; i < length; i++) {
+
+                                JSONObject object = jsonArray.getJSONObject(i);
+
+                                int id = object.getInt("id");
+
+                                JSONObject objectImages = object.getJSONObject("src");
+
+                                String originalUrl = objectImages.getString("original");
+                                String mediumUrl = objectImages.getString("medium");
+
+                                randomList.add(new PhotosBean(id, originalUrl, mediumUrl));
+                                Glide.with(getActivity()).load(mediumUrl)
                                         .thumbnail(0.5f)
                                         .placeholder(R.drawable.ic_place_holder)
                                         .error(R.drawable.ic_place_holder)
                                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                                         .into(ivRandom);
-                                Glide.with(getActivity()).load(userprofile)
-                                        .thumbnail(0.5f)
-                                        .placeholder(R.drawable.ic_user)
-                                        .error(R.drawable.ic_user)
-                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                        .into(ivUserProfile);
-                                tvUserName.setText(name);
-                                tvDesc.setText(alt_description);
                             }
                         }
                     } catch (JSONException e) {
@@ -339,36 +324,38 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
             }
 
             @Override
-            public void onFailure(Call<JsonElement> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
             }
         });
     }
 
     private void getNewPhotos() {
-        Call<JsonElement> call1 = RestClient.post().getNewPhotos(Config.NEW_ID, Config.unsplash_access_key);
+        Call<JsonElement> call1 = RestClient.post().getNewPhotos(1, 80, Config.pexel_api_key);
         call1.enqueue(new Callback<JsonElement>() {
             @Override
-            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+            public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
                 newPhotoslist.clear();
                 Log.e("FeatureNews", response.body().toString());
                 if (response.isSuccessful()) {
-                    JSONArray jsonArr = null;
                     try {
-                        jsonArr = new JSONArray(response.body().toString());
-                        if (jsonArr.length() > 0) {
-                            for (int i = 0; i < jsonArr.length(); i++) {
-                                JSONObject json2 = jsonArr.getJSONObject(i);
-                                String id = json2.getString("id");
+                        JSONObject jsonObject = new JSONObject(response.body().toString());
 
-                                JSONObject object = json2.getJSONObject("urls");
-                                String url = object.getString("regular");
+                        JSONArray jsonArray= jsonObject.getJSONArray("photos");
 
-                                JSONObject objectUser = json2.getJSONObject("user");
-                                JSONObject objectUserProfile = objectUser.getJSONObject("profile_image");
-                                String userprofile = objectUserProfile.getString("large");
+                        int length = jsonArray.length();
+                        if (length > 0) {
+                            for (int i = 0; i < length; i++) {
+                                JSONObject object = jsonArray.getJSONObject(i);
 
-                                newPhotoslist.add(new PhotosBean(id,url,userprofile));
+                                int id = object.getInt("id");
+
+                                JSONObject objectImages = object.getJSONObject("src");
+
+                                String originalUrl = objectImages.getString("original");
+                                String mediumUrl = objectImages.getString("medium");
+
+                                newPhotoslist.add(new PhotosBean(id,originalUrl,mediumUrl));
 
                             }
 
@@ -381,106 +368,10 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
             }
 
             @Override
-            public void onFailure(Call<JsonElement> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
 
             }
         });
-    }
-
-    private void getTrending() {
-        progressDialog.show();
-        Call<JsonElement> call1 = RestClient.post().getTrending(Config.unsplash_access_key);
-        call1.enqueue(new Callback<JsonElement>() {
-            @Override
-            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                progressDialog.dismiss();
-                Log.e("FeatureNews", response.body().toString());
-                if (response.isSuccessful()) {
-                    trendingList.clear();
-                    JSONArray jsonArr = null;
-                    try {
-                        jsonArr = new JSONArray(response.body().toString());
-
-                        if (jsonArr.length() > 0) {
-                            for (int i = 0; i < jsonArr.length(); i++) {
-                                JSONObject json2 = jsonArr.getJSONObject(i);
-                                String id = json2.getString("id");
-                                String title = json2.getString("title");
-                                trendingList.add(new TrendingBean(id, title,false));
-                            }
-                            bindCategoryAdapter();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonElement> call, Throwable t) {
-                progressDialog.dismiss();
-            }
-        });
-    }
-
-    private void getTrendPhotosById() {
-        Call<JsonElement> call1 = RestClient.post().getTrendingPhotosbyId(trendId, 1, 12, Config.unsplash_access_key);
-        call1.enqueue(new Callback<JsonElement>() {
-            @Override
-            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                Log.e("FeatureNews", response.body().toString());
-                if (response.isSuccessful()) {
-                    trendingPhotosByIdList.clear();
-                    JSONArray jsonArr = null;
-                    try {
-                        jsonArr = new JSONArray(response.body().toString());
-
-                        if (jsonArr.length() > 0) {
-                            for (int i = 0; i < jsonArr.length(); i++) {
-                                JSONObject json2 = jsonArr.getJSONObject(i);
-                                String id = json2.getString("id");
-
-                                JSONObject object = json2.getJSONObject("urls");
-                                String url = object.getString("regular");
-                                trendingPhotosByIdList.add(new TrendingBean(id, url));
-
-                            }
-                            bindTrendPhotosByIdAdapter();
-
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonElement> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void bindCategoryAdapter() {
-        if (trendingList.size() > 0) {
-            trendingAdapter = new TrendingAdapter(getActivity(), trendingList);
-            rvTrending.setAdapter(trendingAdapter);
-            trendId = trendingList.get(0).getId();
-            trendingList.get(0).setSelected(true);
-        }
-        trendingAdapter.setOnCategorySelectedListner(this);
-        trendingAdapter.notifyDataSetChanged();
-
-        getTrendPhotosById();
-
-    }
-
-    private void bindTrendPhotosByIdAdapter() {
-        if (trendingPhotosByIdList.size() > 0){
-            trendingPhotoByIdAdapter = new TrendingPhotoByIdAdapter(getActivity(), trendingPhotosByIdList);
-            trendingPhotoByIdAdapter.setOnCategorybyidSelectedListner(this);
-            rvTrendingphotosbyId.setAdapter(trendingPhotoByIdAdapter);
-        }
     }
 
     private void bindTrendData() {
@@ -493,26 +384,26 @@ public class HomeFragment extends Fragment implements NewPhotosAdapter.OnPhotoSe
 
     @Override
     public void setOnPhotoSelatedListner(int position, PhotosBean dataBean) {
-        DetailFragment newsDetailsFragment = DetailFragment.newInstance(dataBean.getId());
+        DetailFragment newsDetailsFragment = DetailFragment.newInstance(dataBean.getMediumUrl());
         loadFragment(newsDetailsFragment);
     }
 
-    @Override
-    public void setOnCategorySelatedListner(int position, TrendingBean trendingBean) {
-        for (int i = 0; i < trendingList.size(); i++) {
-            trendingList.get(i).setSelected(false);
-        }
-        if (trendingList.size() > 0) {
-            trendingAdapter.notifyDataSetChanged();
-            trendId = trendingBean.getId();
-            trendingBean.setSelected(true);
-            getTrendPhotosById();
-        }
-    }
-
-    @Override
-    public void setOnCategorybyidSelatedListner(int position, TrendingBean trendingBean) {
-        DetailFragment newsDetailsFragment = DetailFragment.newInstance(trendingBean.getId());
-        ((MainActivity) getActivity()).loadFragment(newsDetailsFragment);
-    }
+//    @Override
+//    public void setOnCategorySelatedListner(int position, TrendingBean trendingBean) {
+////        for (int i = 0; i < trendingList.size(); i++) {
+////            trendingList.get(i).setSelected(false);
+////        }
+////        if (trendingList.size() > 0) {
+////            trendingAdapter.notifyDataSetChanged();
+////            trendId = trendingBean.getId();
+////            trendingBean.setSelected(true);
+////            getTrendPhotosById();
+////        }
+//    }
+//
+//    @Override
+//    public void setOnCategorybyidSelatedListner(int position, PhotosBean photosBean) {
+//        DetailFragment newsDetailsFragment = DetailFragment.newInstance(photosBean.getMediumUrl());
+//        ((MainActivity) getActivity()).loadFragment(newsDetailsFragment);
+//    }
 }

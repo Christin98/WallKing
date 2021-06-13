@@ -1,46 +1,40 @@
 package com.kcdeveloperss.wallpapers.beans;
 
 public class PhotosBean {
-    private String id;
-    private String regular;
-    private String large;
+    private int id;
+    private String originalUrl;
+    private String mediumUrl;
 
-
-
-    public PhotosBean(String id,String regular,String medium) {
-        this.id = id;
-        this.regular = regular;
-        this.large = medium;
-
-    }
-    public PhotosBean(String id,String regular) {
-        this.id = id;
-        this.regular = regular;
-
-
+    public PhotosBean() {
     }
 
-    public String getId() {
+    public PhotosBean(int id, String originalUrl, String mediumUrl) {
+        this.id = id;
+        this.originalUrl = originalUrl;
+        this.mediumUrl = mediumUrl;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getRegular() {
-        return regular;
+    public String getOriginalUrl() {
+        return originalUrl;
     }
 
-    public void setRegular(String regular) {
-        this.regular = regular;
+    public void setOriginalUrl(String originalUrl) {
+        this.originalUrl = originalUrl;
     }
 
-    public String getMedium() {
-        return large;
+    public String getMediumUrl() {
+        return mediumUrl;
     }
 
-    public void setMedium(String medium) {
-        this.large = medium;
+    public void setMediumUrl(String mediumUrl) {
+        this.mediumUrl = mediumUrl;
     }
 }
